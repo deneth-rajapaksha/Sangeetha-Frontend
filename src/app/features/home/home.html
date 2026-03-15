@@ -1,0 +1,68 @@
+<section class="home-page">
+  <!-- Greeting Header -->
+  <header class="home-header">
+    <h1 class="greeting">{{ greeting }} 👋</h1>
+    <p class="greeting-sub">What do you want to listen to?</p>
+  </header>
+
+  <!-- Featured Playlists -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Featured Playlists</h2>
+      <a routerLink="/app/playlists" class="see-all">See all</a>
+    </div>
+
+    <div *ngIf="loadingPlaylists" class="spinner-wrap">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <div *ngIf="!loadingPlaylists" class="grid">
+      <div *ngFor="let p of playlists" class="playlist-card" [routerLink]="['/app/playlists', p.id]">
+        <div class="card-img-wrap">
+          <img [src]="p.imageUrl || 'https://via.placeholder.com/180x180/282828/1DB954?text=♪'"
+               class="card-img" onerror="this.src='https://via.placeholder.com/180x180/282828/1DB954?text=♪'"/>
+          <button class="play-overlay" (click)="$event.stopPropagation()">
+            <mat-icon>play_circle_filled</mat-icon>
+          </button>
+        </div>
+        <p class="card-title">{{ p.name }}</p>
+        <p class="card-subtitle">{{ p.appUserName }}</p>
+      </div>
+      <div *ngIf="playlists.length === 0" class="empty-state">
+        <mat-icon>queue_music</mat-icon>
+        <p>No public playlists yet</p>
+        <a routerLink="/app/playlists" class="btn-action">Browse Playlists</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Songs -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Recent Songs</h2>
+      <a routerLink="/app/songs" class="see-all">See all</a>
+    </div>
+
+    <div *ngIf="loadingSongs" class="spinner-wrap">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <div *ngIf="!loadingSongs" class="grid">
+      <div *ngFor="let s of songs" class="song-card" (click)="playSong(s)">
+        <div class="card-img-wrap">
+          <img [src]="s.imageUrl || 'https://via.placeholder.com/180x180/282828/1DB954?text=♪'"
+               class="card-img" onerror="this.src='https://via.placeholder.com/180x180/282828/1DB954?text=♪'"/>
+          <button class="play-overlay">
+            <mat-icon>play_circle_filled</mat-icon>
+          </button>
+        </div>
+        <p class="card-title">{{ s.title }}</p>
+        <p class="card-subtitle">{{ s.artist }}</p>
+      </div>
+      <div *ngIf="songs.length === 0" class="empty-state">
+        <mat-icon>library_music</mat-icon>
+        <p>No songs available</p>
+      </div>
+    </div>
+  </section>
+</section>

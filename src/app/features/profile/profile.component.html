@@ -1,0 +1,159 @@
+<section class="profile-page">
+  <div *ngIf="isLoading" class="spinner-wrap"><mat-spinner diameter="52"></mat-spinner></div>
+
+  <ng-container *ngIf="!isLoading && user">
+    <!-- Profile Hero -->
+    <div class="profile-hero">
+      <div class="avatar-wrap">
+        <div class="avatar">{{ (user.name || 'U')[0].toUpperCase() }}</div>
+      </div>
+      <div class="profile-info">
+        <span class="profile-badge">{{ user.role }}</span>
+        <h1 class="profile-name">{{ user.name }}</h1>
+        <p class="profile-email">{{ user.email }}</p>
+        <p class="profile-joined" *ngIf="joinDate">Member since {{ joinDate }}</p>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="profile-tabs">
+      <mat-tab-group class="dark-tabs" animationDuration="200ms">
+        <!-- Profile Details Tab -->
+        <mat-tab label="Profile Details">
+          <div class="tab-content">
+            <h3 class="section-title">Edit Profile</h3>
+            <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile-form">
+              <div class="form-row">
+                <div class="field-group">
+                  <label>Full Name</label>
+                  <mat-form-field appearance="fill" class="field">
+                    <input matInput formControlName="name" placeholder="Your name"/>
+                    <mat-icon matPrefix>person</mat-icon>
+                    <mat-error *ngIf="profileForm.get('name')?.hasError('required')">Name is required</mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="field-group">
+                  <label>Email Address</label>
+                  <mat-form-field appearance="fill" class="field">
+                    <input matInput type="email" formControlName="email" placeholder="your@email.com"/>
+                    <mat-icon matPrefix>email</mat-icon>
+                    <mat-error *ngIf="profileForm.get('email')?.hasError('email')">Invalid email</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn-save" [disabled]="isSavingProfile || !profileForm.valid || !profileForm.dirty">
+                  <mat-spinner *ngIf="isSavingProfile" diameter="18"></mat-spinner>
+                  <mat-icon *ngIf="!isSavingProfile">save</mat-icon>
+                  <span>{{ isSavingProfile ? 'Saving...' : 'Save Changes' }}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </mat-tab>
+
+        <!-- Security Tab -->
+        <mat-tab label="Security">
+          <div class="tab-content">
+            <h3 class="section-title">Change Password</h3>
+            <p class="section-sub">After changing, you'll need to log in again</p>
+
+            <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="profile-form">
+              <div class="field-group">
+                <label>Current Password</label>
+                <mat-form-field appearance="fill" class="field">
+                  <input matInput [type]="hideOld ? 'password' : 'text'" formControlName="oldPassword" placeholder="Current password"/>
+                  <mat-icon matPrefix>lock</mat-icon>
+                  <button mat-icon-button matSuffix type="button" (click)="hideOld = !hideOld">
+                    <mat-icon>{{ hideOld ? 'visibility_off' : 'visibility' }}</mat-icon>
+                  </button>
+                  <mat-error *ngIf="passwordForm.get('oldPassword')?.hasError('required')">Required</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="field-group">
+                <label>New Password</label>
+                <mat-form-field appearance="fill" class="field">
+                  <input matInput [type]="hideNew ? 'password' : 'text'" formControlName="newPassword" placeholder="Min. 8 characters"/>
+                  <mat-icon matPrefix>lock_open</mat-icon>
+                  <button mat-icon-button matSuffix type="button" (click)="hideNew = !hideNew">
+                    <mat-icon>{{ hideNew ? 'visibility_off' : 'visibility' }}</mat-icon>
+                  </button>
+                  <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('minlength')">Minimum 8 characters</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="field-group">
+                <label>Confirm New Password</label>
+                <mat-form-field appearance="fill" class="field">
+                  <input matInput [type]="hideConfirm ? 'password' : 'text'" formControlName="confirmPassword" placeholder="Repeat new password"/>
+                  <mat-icon matPrefix>lock_outline</mat-icon>
+                  <button mat-icon-button matSuffix type="button" (click)="hideConfirm = !hideConfirm">
+                    <mat-icon>{{ hideConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+                  </button>
+                  <mat-error *ngIf="passwordForm.hasError('mismatch') && passwordForm.get('confirmPassword')?.touched">Passwords don't match</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn-save btn-danger" [disabled]="isSavingPassword || !passwordForm.valid">
+                  <mat-spinner *ngIf="isSavingPassword" diameter="18"></mat-spinner>
+                  <mat-icon *ngIf="!isSavingPassword">security</mat-icon>
+                  <span>{{ isSavingPassword ? 'Changing...' : 'Change Password' }}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </mat-tab>
+        <!-- Account Tab -->
+        <mat-tab label="Account">
+          <div class="tab-content">
+            <h3 class="section-title">Account & Role</h3>
+            <p class="section-sub">Switch your role to get admin access and upload songs</p>
+
+            <div class="role-card">
+              <div class="role-info">
+                <mat-icon class="role-icon" [class.admin-icon]="user.role === 'ADMIN'">
+                  {{ user.role === 'ADMIN' ? 'admin_panel_settings' : 'person' }}
+                </mat-icon>
+                <div class="role-text">
+                  <span class="role-label">Current Role</span>
+                  <span class="role-badge" [class.badge-admin]="user.role === 'ADMIN'" [class.badge-user]="user.role === 'USER'">
+                    {{ user.role }}
+                  </span>
+                </div>
+              </div>
+              <div class="role-perms">
+                <div class="perm-item" [class.perm-granted]="user.role === 'ADMIN'">
+                  <mat-icon>{{ user.role === 'ADMIN' ? 'check_circle' : 'cancel' }}</mat-icon>
+                  <span>Upload Songs</span>
+                </div>
+                <div class="perm-item" [class.perm-granted]="user.role === 'ADMIN'">
+                  <mat-icon>{{ user.role === 'ADMIN' ? 'check_circle' : 'cancel' }}</mat-icon>
+                  <span>Delete Songs</span>
+                </div>
+                <div class="perm-item perm-granted">
+                  <mat-icon>check_circle</mat-icon>
+                  <span>Create Playlists</span>
+                </div>
+                <div class="perm-item perm-granted">
+                  <mat-icon>check_circle</mat-icon>
+                  <span>Play Music</span>
+                </div>
+              </div>
+
+              <button class="btn-switch-role" (click)="switchRole()" [disabled]="isSwitchingRole"
+                [class.btn-to-user]="user.role === 'ADMIN'">
+                <mat-spinner *ngIf="isSwitchingRole" diameter="18"></mat-spinner>
+                <mat-icon *ngIf="!isSwitchingRole">{{ user.role === 'ADMIN' ? 'person' : 'admin_panel_settings' }}</mat-icon>
+                <span *ngIf="!isSwitchingRole">{{ user.role === 'ADMIN' ? 'Switch to User' : 'Become Admin' }}</span>
+                <span *ngIf="isSwitchingRole">Switching...</span>
+              </button>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </ng-container>
+</section>

@@ -1,0 +1,30 @@
+/* Re-use shared page CSS structure from songs.component.css */
+.page { padding: 24px 32px 120px; max-width: 1400px; }
+.page-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 28px; }
+.page-title { font-size: 30px; font-weight: 900; color: #fff; }
+.header-actions { display: flex; align-items: center; gap: 12px; }
+.search-bar { display: flex; align-items: center; gap: 8px; background: #282828; border-radius: 500px; padding: 8px 18px; border: 1px solid transparent; transition: border-color 0.2s; }
+.search-bar:focus-within { border-color: #fff; }
+.search-bar mat-icon { color: #b3b3b3; font-size: 20px; }
+.search-bar input { background: transparent; border: none; outline: none; color: #fff; font-size: 14px; width: 200px; }
+.search-bar input::placeholder { color: #6a6a6a; }
+.btn-create { display: flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 500px; font-size: 14px; font-weight: 700; background: #1DB954; color: #000; border: none; cursor: pointer; transition: all 0.2s; }
+.btn-create:hover { background: #1ed760; }
+.spinner-wrap { display: flex; justify-content: center; padding: 60px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 16px; }
+.playlist-card { background: #181818; border-radius: 8px; padding: 16px; cursor: pointer; transition: background 0.2s, transform 0.2s; position: relative; }
+.playlist-card:hover { background: #282828; transform: translateY(-4px); }
+.card-img-wrap { position: relative; margin-bottom: 12px; }
+.card-img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+.play-overlay { position: absolute; bottom: 8px; right: 8px; background: #1DB954; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; opacity: 0; transform: translateY(8px); transition: all 0.2s; box-shadow: 0 8px 24px rgba(0,0,0,0.5); pointer-events: none; }
+.play-overlay mat-icon { color: #000; font-size: 26px; }
+.card-img-wrap:hover .play-overlay { opacity: 1; transform: translateY(0); }
+.card-title { color: #fff; font-size: 14px; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-sub { color: #b3b3b3; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+.empty-state { grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 60px; color: #6a6a6a; }
+.empty-state mat-icon { font-size: 56px; width: 56px; height: 56px; }
+.pagination { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 32px; }
+.page-btn { background: #282828; border: none; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #fff; cursor: pointer; transition: background 0.2s; }
+.page-btn:hover:not(:disabled) { background: #404040; }
+.page-btn:disabled { opacity: 0.3; cursor: default; }
+.page-info { color: #b3b3b3; font-size: 14px; font-weight: 600; }

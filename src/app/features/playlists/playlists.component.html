@@ -1,0 +1,45 @@
+<section class="page">
+  <header class="page-header">
+    <h1 class="page-title">🎧 Public Playlists</h1>
+    <div class="header-actions">
+      <div class="search-bar">
+        <mat-icon>search</mat-icon>
+        <input type="text" placeholder="Search playlists..." [(ngModel)]="searchQuery" (input)="onSearch()"/>
+      </div>
+      <button class="btn-create" (click)="openCreate()">
+        <mat-icon>add</mat-icon> Create Playlist
+      </button>
+    </div>
+  </header>
+
+  <div *ngIf="isLoading" class="spinner-wrap"><mat-spinner diameter="44"></mat-spinner></div>
+
+  <div *ngIf="!isLoading" class="grid">
+    <div *ngFor="let p of playlists" class="playlist-card" (click)="viewPlaylist(p.id)">
+      <div class="card-img-wrap">
+        <img [src]="p.imageUrl || 'https://via.placeholder.com/180x180/282828/1DB954?text=♪'"
+             class="card-img" onerror="this.src='https://via.placeholder.com/180x180/282828/1DB954?text=♪'"/>
+        <div class="play-overlay">
+          <mat-icon>play_circle_filled</mat-icon>
+        </div>
+      </div>
+      <p class="card-title">{{ p.name }}</p>
+      <p class="card-sub">By {{ p.appUserName }}</p>
+      <p class="card-sub" *ngIf="p.description">{{ p.description }}</p>
+    </div>
+    <div *ngIf="playlists.length === 0" class="empty-state">
+      <mat-icon>queue_music</mat-icon>
+      <p>No public playlists yet. Create one!</p>
+    </div>
+  </div>
+
+  <div *ngIf="totalPages > 1" class="pagination">
+    <button class="page-btn" (click)="prevPage()" [disabled]="page === 0">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <span class="page-info">{{ page + 1 }} / {{ totalPages }}</span>
+    <button class="page-btn" (click)="nextPage()" [disabled]="page >= totalPages - 1">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+</section>

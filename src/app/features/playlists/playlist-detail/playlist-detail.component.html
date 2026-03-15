@@ -1,0 +1,81 @@
+<section class="detail-page" *ngIf="!isLoading && playlist">
+  <!-- Hero Banner -->
+  <div class="playlist-hero">
+    <img [src]="playlist.imageUrl || 'https://via.placeholder.com/220x220/282828/1DB954?text=♪'"
+         class="hero-img" onerror="this.src='https://via.placeholder.com/220x220/282828/1DB954?text=♪'"/>
+    <div class="hero-info">
+      <span class="playlist-label">{{ playlist.isPublic ? 'Public Playlist' : 'Private Playlist' }}</span>
+      <h1 class="playlist-name">{{ playlist.name }}</h1>
+      <p class="playlist-desc" *ngIf="playlist.description">{{ playlist.description }}</p>
+      <p class="playlist-meta">By <strong>{{ playlist.appUserName }}</strong> · {{ playlist.songCount }} songs</p>
+      <div class="hero-actions">
+        <button class="btn-play-all" (click)="playAll()" [disabled]="!(playlist.songs && playlist.songs.length)">
+          <mat-icon>play_arrow</mat-icon> Play All
+        </button>
+        <button *ngIf="isOwner" class="btn-add-song" (click)="openAddSong()">
+          <mat-icon>add</mat-icon> Add Song
+        </button>
+        <button *ngIf="isOwner" class="btn-delete-pl" (click)="deletePlaylist()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Song List -->
+  <div class="songs-list">
+    <div class="songs-header">
+      <span class="col-num">#</span>
+      <span class="col-title">Title</span>
+      <span class="col-artist">Artist</span>
+      <span class="col-action" *ngIf="isOwner"></span>
+    </div>
+    <div class="song-row" *ngFor="let s of playlist.songs; let i = index"
+         [class.active]="s.songId === currentSongId" (click)="playSong(s)">
+      <span class="col-num">
+        <mat-icon *ngIf="s.songId === currentSongId" class="playing-icon">equalizer</mat-icon>
+        <span *ngIf="s.songId !== currentSongId">{{ i + 1 }}</span>
+      </span>
+      <div class="col-title-wrap">
+        <img [src]="s.imageUrl || 'https://via.placeholder.com/40x40/282828/1DB954?text=♪'" class="song-thumb"
+             onerror="this.src='https://via.placeholder.com/40x40/282828/1DB954?text=♪'"/>
+        <span class="song-title">{{ s.title }}</span>
+      </div>
+      <span class="col-artist">{{ s.artist }}</span>
+      <span class="col-action" *ngIf="isOwner">
+        <button class="btn-remove" (click)="$event.stopPropagation(); removeSong(s.songId)">
+          <mat-icon>remove_circle_outline</mat-icon>
+        </button>
+      </span>
+    </div>
+    <div *ngIf="!(playlist.songs && playlist.songs.length)" class="empty-songs">
+      <mat-icon>queue_music</mat-icon>
+      <p>No songs in this playlist yet</p>
+    </div>
+  </div>
+</section>
+
+<!-- Add Song Panel -->
+<div class="add-song-panel" *ngIf="showAddSong">
+  <div class="panel-overlay" (click)="showAddSong = false"></div>
+  <div class="panel-content">
+    <div class="panel-header">
+      <h3>Add Songs</h3>
+      <button class="panel-close" (click)="showAddSong = false"><mat-icon>close</mat-icon></button>
+    </div>
+    <input type="text" placeholder="Search..." [(ngModel)]="songSearch" (input)="filterSongs()" class="panel-search"/>
+    <div class="panel-songs">
+      <div *ngFor="let s of filteredSongs" class="panel-song-row">
+        <img [src]="s.imageUrl || 'https://via.placeholder.com/36x36'" class="panel-thumb"
+             onerror="this.src='https://via.placeholder.com/36x36/282828/1DB954?text=♪'"/>
+        <div class="panel-song-info">
+          <span class="psi-title">{{ s.title }}</span>
+          <span class="psi-artist">{{ s.artist }}</span>
+        </div>
+        <button class="btn-add" (click)="addSong(s.id)"><mat-icon>add</mat-icon></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isLoading" class="spinner-wrap"><mat-spinner diameter="52"></mat-spinner></div>

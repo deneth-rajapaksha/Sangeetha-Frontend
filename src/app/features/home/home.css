@@ -1,0 +1,146 @@
+.home-page {
+  padding: 24px 32px 120px;
+  max-width: 1400px;
+}
+
+.home-header {
+  margin-bottom: 32px;
+}
+
+.greeting {
+  font-size: 36px;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.greeting-sub {
+  color: #b3b3b3;
+  font-size: 15px;
+}
+
+.section {
+  margin-bottom: 40px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.see-all {
+  color: #b3b3b3;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.see-all:hover { color: #fff; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.playlist-card, .song-card {
+  background: #181818;
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  position: relative;
+}
+.playlist-card:hover, .song-card:hover {
+  background: #282828;
+  transform: translateY(-4px);
+}
+
+.card-img-wrap {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.card-img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+.play-overlay {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: #1DB954;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.2s;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+.play-overlay mat-icon { color: #000; font-size: 26px; }
+.card-img-wrap:hover .play-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-title {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-subtitle {
+  color: #b3b3b3;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.spinner-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 40px;
+  color: #6a6a6a;
+}
+.empty-state mat-icon { font-size: 48px; width: 48px; height: 48px; }
+.btn-action {
+  padding: 10px 24px;
+  border-radius: 500px;
+  background: #1DB954;
+  color: #000;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+}

@@ -1,0 +1,48 @@
+<section class="page">
+  <header class="page-header">
+    <h1 class="page-title">🎵 Songs</h1>
+    <div class="header-actions">
+      <div class="search-bar">
+        <mat-icon>search</mat-icon>
+        <input type="text" placeholder="Search songs..." [(ngModel)]="searchQuery" (input)="onSearch($event)"/>
+      </div>
+      <button *ngIf="isAdmin" class="btn-upload" (click)="openUpload()">
+        <mat-icon>upload</mat-icon> Upload Song
+      </button>
+    </div>
+  </header>
+
+  <div *ngIf="isLoading" class="spinner-wrap"><mat-spinner diameter="44"></mat-spinner></div>
+
+  <div *ngIf="!isLoading" class="grid">
+    <div *ngFor="let s of songs" class="song-card" [class.playing]="s.id === currentSongId" (click)="playSong(s)">
+      <div class="card-img-wrap">
+        <img [src]="s.imageUrl || 'https://via.placeholder.com/180x180/282828/1DB954?text=♪'"
+             class="card-img" onerror="this.src='https://via.placeholder.com/180x180/282828/1DB954?text=♪'"/>
+        <div class="play-overlay">
+          <mat-icon>{{ s.id === currentSongId ? 'pause_circle_filled' : 'play_circle_filled' }}</mat-icon>
+        </div>
+      </div>
+      <p class="card-title">{{ s.title }}</p>
+      <p class="card-artist">{{ s.artist }}</p>
+      <button *ngIf="isAdmin" class="btn-delete" (click)="$event.stopPropagation(); deleteSong(s.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <div *ngIf="songs.length === 0" class="empty-state">
+      <mat-icon>library_music</mat-icon>
+      <p>No songs found</p>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="totalPages > 1" class="pagination">
+    <button class="page-btn" (click)="prevPage()" [disabled]="page === 0">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <span class="page-info">{{ page + 1 }} / {{ totalPages }}</span>
+    <button class="page-btn" (click)="nextPage()" [disabled]="page >= totalPages - 1">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+</section>
